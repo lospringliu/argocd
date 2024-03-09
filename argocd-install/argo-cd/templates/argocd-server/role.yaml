@@ -1,7 +1,8 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ template "argo-cd.server.fullname" . }}
+  name: {{ include "argo-cd.server.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
   labels:
     {{- include "argo-cd.labels" (dict "context" . "component" .Values.server.name "name" .Values.server.name) | nindent 4 }}
 rules:
@@ -22,6 +23,9 @@ rules:
   - argoproj.io
   resources:
   - applications
+  {{- if .Values.applicationSet.enabled }}
+  - applicationsets
+  {{- end }}
   - appprojects
   verbs:
   - create
@@ -38,3 +42,11 @@ rules:
   verbs:
   - create
   - list
+{{- if eq (toString (index .Values.configs.cm "exec.enabled")) "true" }}
+- apiGroups:
+  - ""
+  resources:
+  - pods/exec
+  verbs:
+  - create
+{{- end }}

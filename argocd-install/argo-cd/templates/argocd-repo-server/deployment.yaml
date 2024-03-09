@@ -1,4 +1,3 @@
-{{- $redisHa := (index .Values "redis-ha") -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:

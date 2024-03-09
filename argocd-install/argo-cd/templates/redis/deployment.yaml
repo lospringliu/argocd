@@ -1,5 +1,3 @@
-{{- $redisHa := (index .Values "redis-ha") -}}
-{{- if and .Values.redis.enabled (not $redisHa.enabled) -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -80,5 +78,4 @@ spec:
 {{- end }}
 {{- if .Values.redis.priorityClassName }}
       priorityClassName: {{ .Values.redis.priorityClassName }}
-{{- end }}
 {{- end }}
